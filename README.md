@@ -13,9 +13,7 @@ Inspired by Tetris-OS by JDH, (R.I.P), This is snake; but as an OS!
 I'm currently running in QEMU. We'll see if I can get this running on the real metal.
 (Probably Not).
 
-The Bootloader is no longer flashing, however, the kernel is not booting just yet. I presume I have the wrong entrypoint.
-I believed it should be 0x200 because that's what the hex editor was telling me the number was, but maybe I was wrong.
-
+It works. The kernel is loaded, and the C code is running.
 
 ### Error Codes
 
