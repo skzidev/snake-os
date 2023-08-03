@@ -14,6 +14,10 @@ load_kernel:
 	call clear_screen     ; Clear Screen
 	call disk_load        ; Load From Disk
 
+	mov ah, 0x00          ; Start setting video mode
+	mov al, 0x13          ; 320x200 256 color graphics
+	int 0x10
+
 	cli                   ; Disable Interrupts
 	lgdt [gdt_descriptor] ; GDT start address
 	mov eax, cr0
@@ -67,6 +71,7 @@ sectors_error:
 	mov ah, '2' ; Error Code
 	jmp err_loop
 err_loop:
+	call clear_screen
 	mov dh, ah ; Print Error Message
 	mov ah, 0x0e
 	mov al, 'E'
@@ -118,7 +123,7 @@ gdt_start:
 start_protected_mode:
 	; Load the kernel
 	mov ax, DATASEG
-	mov dx, ax
+	mov ds, ax
 	mov ss, ax
 	mov es, ax
 	mov fs, ax
