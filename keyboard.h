@@ -1,5 +1,7 @@
+typedef void (*keyboard_callback)();
+
 enum SupportedKeyCodes {
-	NULLKEY    = 0,
+	NULLKEY    = 0x00,
 	ENTERKEY   = 0x9C,
 	UPKEY      = 0x75,
 	DOWNKEY    = 0x50,
@@ -7,20 +9,39 @@ enum SupportedKeyCodes {
 	LEFTKEY    = 0x4B
 };
 
-void keyboard_init();
-void keyboard_init(){
-	// Init Keyboard Driver
+typedef struct keyboard_callbackLookupTable {
+	keyboard_callback NULLKEY;       // When "NULLKEY" is pressed
+	keyboard_callback ENTERKEY;     // When "Enter" is pressed
+	keyboard_callback UPKEY;       // When "Up Arrow" is pressed
+	keyboard_callback DOWNKEY;    // When "Down Arrow" is pressed
+	keyboard_callback RIGHTKEY;  // When "Right Arrow" is pressed
+	keyboard_callback LEFTKEY;  // When "Left Arrow" is pressed
+} keyboard_cbTable;
+
+keyboard_cbTable globalTable;
+
+keyboard_cbTable keyboard_initiateCbTable(){
+	struct keyboard_callbackLookupTable table;
+	return table;
 }
 
+void keyboard_init(keyboard_cbTable table);
+void keyboard_init(keyboard_cbTable table){
+	// Init Keyboard Driver with callback table
+	globalTable = table;
+}
+
+// Custom `inportb` function written in inline ASM.
 unsigned char readportb(unsigned char portid);
 unsigned char readportb(unsigned char portid){
-	unsigned char res = 0;
+	unsigned char ret;
+	asm volatile ("inb %%dx,%%al":"=a" (ret):"d" (portid));
+	return ret;
+}
 
-	//__asm__("mov dx, portid");
-	//__asm__("in ax, dx");
-	//__asm__("mov [res], al");
-
-	return res;
+void writeportb(unsigned char portid, unsigned char value);
+void writeportb(unsigned char portid, unsigned char value){
+	asm volatile ("outb %%al,%%dx": :"d" (portid), "a" (value));
 }
 
 void keyboard_read();
@@ -34,6 +55,7 @@ void keyboard_read(){
 			break;
 		case ENTERKEY:
 			// Enter key was pressed.
+			globalTable.ENTERKEY();
 			break;
 		case UPKEY:
 			// Up was pressed
@@ -48,7 +70,7 @@ void keyboard_read(){
 			// Right was pressed
 			break;
 		default:
-			// We don't care about that.
+			// A key that isn't supported was pressed.
 			break;
 	}
 }

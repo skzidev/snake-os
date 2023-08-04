@@ -18,13 +18,13 @@ struct DisplayModeDetails display_init(){
 	return details;
 }
 
-void putpixel(int pos_x, int pos_y, unsigned char VGA_COLOR)
+static inline void putpixel(int pos_x, int pos_y, unsigned char VGA_COLOR)
 {
     unsigned char* location = (unsigned char*)VRAM + 320 * pos_y + pos_x;
     *location = VGA_COLOR;
 }
 
-static void fillrect(unsigned char color, int x, int y, unsigned long w, unsigned long h) {
+static void fillrect(unsigned char color, int x, int y, int w, int h) {
     unsigned char *where = (unsigned char*)VRAM;
     int i, j;
  
