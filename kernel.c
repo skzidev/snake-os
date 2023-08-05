@@ -9,17 +9,21 @@
 		   Licensed under MIT.
 */
 
+ // All these files come with the prefix of the filename
+// This modulates the OS so code can be easily traced.
 #include "display.h"    // Include Display Drivers
-#include "constants.h" // Include constants that C doesn't have included
-#include "keyboard.h" // Include the custom keyboard driver
-#include "font.h"    // Custom 8x8 font, grabbed from github. Might need another.
+#include "constants.h" //  Include constants that C doesn't have included
+#include "keyboard.h" //   Include the custom keyboard driver
+#include "font.h"    //    Include custom font. Doesn't work yet.
 
 DisplayDetails globalDisplayDetails; // The display details.
 
+// On key press of enter
 void enterPressed(){
 	putpixel(10, 10, 0x0E);
 }
 
+// Entrypoint main
 int main(){
 	// Init the display details
 	DisplayDetails details = display_init();
@@ -29,14 +33,15 @@ int main(){
 	keyboard_cbTable callbackTable = keyboard_initiateCbTable();
 	callbackTable.ENTERKEY = &enterPressed;
 	keyboard_init(callbackTable);
-	
-	bool running = true;
 
-	keyboard_read();
+	// Create our running variable
+	bool running = true;
 	
 	while(running){
-		// This is the OS loop
+	     // This is the OS loop
+		//  Here the code refreshes the screen and keyboard here.
+
+		// Read a key
+		keyboard_read();
 	}
-	
-	// return 0;
 }
