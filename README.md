@@ -8,15 +8,15 @@ Inspired by Tetris-OS by JDH, (R.I.P), This is snake; but as an OS!
 - [x] C in the binary
 - [x] C running in the OS
 - [x] Graphics driver running
-- [ ] Keyboard Driver working (PS/2)
-- [ ] Create a working 8x8 pixel font.
+- [x] Keyboard Driver working (PS/2)
 - [ ] Actual Game/Engine code running
+- [ ] Game music and sound effects.
 
-I need to finish the keyboard driver, but before that I need to get GDB working.
+Sorry for not working yesterday. I was on a trip somewhere for the day. There is an update.
 
-Currently, GDB is giving me memory addresses, and breakpoints won't work, So It's basically useless.
-
-I need to get my compiler information loaded into it.
+2 days ago, when I finished work for the day, I fixed the keyboard driver.
+It was reading at the beginning, not every frame. Fixed now, made some changes.
+They keyboard driver is done. The font is not entirely required right now, but will be later.
 
 I'm currently running in QEMU. We'll see if I can get this running on the real metal.
 (Probably Not).
