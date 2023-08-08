@@ -12,15 +12,17 @@
  // All these files come with the prefix of the filename
 // This modulates the OS so code can be easily traced.
 #include "display.h"    // Include Display Drivers
-#include "constants.h" //  Include constants that C doesn't have included
+#include "constants.h" //  Include constants which are in the std lib.
 #include "keyboard.h" //   Include the custom keyboard driver
 #include "font.h"    //    Include custom font. Doesn't work yet.
 #include "game.h"   //     Include game code library
 
 DisplayDetails globalDisplayDetails; // The display details.
 
-// On key press of enter
+// Callbacks
+
 void enterPressed(){
+	// Enter was pressed
 	putpixel(10, 10, 0x0E);
 }
 void upPressed(){
@@ -40,6 +42,27 @@ void rightPressed(){
 	putpixel(10, 10, 0x67);
 }
 
+// Error messages
+void keyboardNotPresent(){
+	// Print "Err 3"
+	/*
+	Pixel Arrangement:
+	
+		XXXXX XXXX  XXXX    XXXXX
+		X     X   X X   X        X
+		XXXXX XXXX  XXXX    XXXXX
+		X     X  X  X  X         X
+		XXXXX X   X X   X   XXXXX
+	*/
+	// Show an error message
+	putpixel(0, 0, 0x28);
+	putpixel(0, 1, 0x28);
+	putpixel(0, 2, 0x28);
+	putpixel(0, 3, 0x28);
+	putpixel(0, 4, 0x28);
+	putpixel(0, 5, 0x28);
+}
+
 // Entrypoint main
 int main(){
 	// Init the display details
@@ -53,6 +76,7 @@ int main(){
 	callbackTable.DOWNKEY = &downPressed;
 	callbackTable.RIGHTKEY = &rightPressed;
 	callbackTable.LEFTKEY = &leftPressed;
+	callbackTable.NOKEYBOARD = &keyboardNotPresent;
 	keyboard_init(callbackTable);
 
 	// Draw our logo

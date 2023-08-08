@@ -44,6 +44,7 @@ typedef struct keyboard_callbackLookupTable {
 	keyboard_callback DOWNKEY;        //    When "Down Arrow" is pressed
 	keyboard_callback RIGHTKEY;      //     When "Right Arrow" is pressed
 	keyboard_callback LEFTKEY;      //      When "Left Arrow" is pressed
+	keyboard_callback NOKEYBOARD;  //       If there is no keyboard connected
 } keyboard_cbTable;
 
 // The global callback table
@@ -53,13 +54,6 @@ keyboard_cbTable keyboard_globalTable;
 keyboard_cbTable keyboard_initiateCbTable(){
 	struct keyboard_callbackLookupTable table;
 	return table;
-}
-
-// Initiator function
-void keyboard_init(keyboard_cbTable table);
-void keyboard_init(keyboard_cbTable table){
-	// Init Keyboard Driver with callback table
-	keyboard_globalTable = table;
 }
 
 // Custom `inportb` function written in inline ASM.
@@ -74,6 +68,32 @@ unsigned char readportb(unsigned char portid){
 void writeportb(unsigned char portid, unsigned char value);
 void writeportb(unsigned char portid, unsigned char value){
 	asm volatile ("outb %%al,%%dx": :"d" (portid), "a" (value));
+}
+
+int keyboard_detect();
+int keyboard_detect(){
+	// Create an int representing a bool
+	int keyboardConnected = 0;
+	// Write a 0xEE command to port 0x60 (Echo command)
+	writeportb(KEYBOARD, 0xEE);
+	// Read the response
+	unsigned char value = readportb(KEYBOARD);
+	// Determine if it's connected. Reversed for debugging perposes
+	keyboardConnected = value != 0x00 ? 0 : 1;
+	// Run the error handler.
+	if(keyboardConnected == 0){
+		keyboard_globalTable.NOKEYBOARD();
+	}
+	// Return the value.
+	return keyboardConnected;
+}
+
+// Initiator function
+void keyboard_init(keyboard_cbTable table);
+void keyboard_init(keyboard_cbTable table){
+	// Init Keyboard Driver with callback table
+	keyboard_globalTable = table;
+	keyboard_detect();
 }
 
 
@@ -106,6 +126,9 @@ void keyboard_read(){
 		case RIGHTKEY:
 			keyboard_globalTable.RIGHTKEY();
 			// Right was pressed
+			break;
+		case KEYUP:
+			;
 			break;
 		default:
 			// A key that isn't supported was pressed.
