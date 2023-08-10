@@ -8,14 +8,10 @@ Non-interrupt based because I haven't set up an IDT yet.
 
 todo list:
 
+TODO: Fix the Right and Down scancodes. Only 3/5 of the keys work.
+Up, Left, and Enter. Right and down do not work.
+changing the scancodes to be correct causes triple faulting and/or just not recognizing any keys.
 TODO: Add USB Keyboard support.
-
-The reason I'm not doing this out of the box is because of 2 reasons
-
-1. I want to learn how PS/2 works
-2. Lots of laptops use PS/2 to connect their keyboards internally,
-and I'm planning on seeing if I can run this OS on an old laptop I have.
-
 */
 
 // Global definitions
@@ -31,7 +27,7 @@ enum SupportedKeyCodes {
 	ENTERKEY   = 0x1C,         //  Enter; Used to start the game
 	UPKEY      = 0x11,        //   Up arrow; Used to move the snake up
 	DOWNKEY    = 0x50,       //    Down arrow; Move the snake down
-	RIGHTKEY   = 0x74,      //     Right Arrow; Move the snake right
+	RIGHTKEY   = 0x20,      //     Right Arrow; Move the snake right
 	LEFTKEY    = 0x1E,     //      Left Arrow; Move the snake's head left
 	KEYUP      = 0xF0     //       Keyboard sends this scancode on key up
 };
@@ -79,7 +75,7 @@ int keyboard_detect(){
 	// Read the response
 	unsigned char value = readportb(KEYBOARD);
 	// Determine if it's connected. Reversed for debugging perposes
-	keyboardConnected = value != 0x00 ? 0 : 1;
+	keyboardConnected = value == 0x00 ? 0 : 1;
 	// Run the error handler.
 	if(keyboardConnected == 0){
 		keyboard_globalTable.NOKEYBOARD();
@@ -112,26 +108,26 @@ void keyboard_read(){
 			keyboard_globalTable.ENTERKEY();
 			break;
 		case UPKEY:
-			// Up was pressed
+			// W was pressed
 			keyboard_globalTable.UPKEY();
 			break;
 		case DOWNKEY:
 			keyboard_globalTable.DOWNKEY();
-			// Down was pressed
+			// S was pressed
 			break;
 		case LEFTKEY:
 			keyboard_globalTable.LEFTKEY();
-			// Left was pressed
+			// A was pressed
 			break;
 		case RIGHTKEY:
 			keyboard_globalTable.RIGHTKEY();
-			// Right was pressed
+			// D was pressed
 			break;
 		case KEYUP:
 			;
 			break;
 		default:
-			// A key that isn't supported was pressed.
+			// These keys are irrelevant (for now)
 			break;
 	}
 }

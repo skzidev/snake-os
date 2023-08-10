@@ -49,3 +49,76 @@ static void fillrect(unsigned char color, int x, int y, int w, int h) {
         where ++;
     }
 }
+
+void display_drawErr(){
+		/*
+		Visualization; Converting this into pixel coordinates.
+	
+		XXXXX XXXX  XXXX    XXXXX
+		X     X   X X   X        X
+		XXXXX XXXX  XXXX    XXXXX
+		X     X  X  X  X         X
+		XXXXX X   X X   X   XXXXX
+	*/
+	// Show a crude E
+	for(int i = 0; i < 8; i ++){
+		// Create the straight 8px long line
+		putpixel(0, i, 0x28);
+	}
+	for(int i = 0; i < 5; i ++){
+		// Create the three other 5px long lines
+		putpixel(i, 0, 0x28);
+		putpixel(i, 4, 0x28);
+		putpixel(i, 8, 0x28);
+	}
+
+	// Show a crude R or two
+	for(int i = 0; i < 9; i ++){
+		// Create the long straight line
+		putpixel(10, i, 0x28);
+		// Second R
+		putpixel(20, i, 0x28);
+	}
+	for(int i = 0; i < 5; i ++){
+		// Create part of the semi-circle
+		putpixel(10 + i, 0, 0x28);
+		putpixel(i + 10, 3, 0x28);
+		// Second R
+		putpixel(20 + i, 0, 0x28);
+		putpixel(i + 20, 3, 0x28);
+	}
+	// Finish the semi-circles
+	putpixel(15, 1, 0x28);
+	putpixel(15, 2, 0x28);
+	// Second R
+	putpixel(25, 1, 0x28);
+	putpixel(25, 2,0x28);
+	// Create the diagnal line
+	for(int i = 0; i < 6; i ++){
+		int finalY = 7;
+		int finalXOne = 15;
+		int finalXTwo = 25;
+
+		putpixel(finalXOne - i, finalY - i, 0x28);
+		putpixel(finalXTwo - i, finalY - i, 0x28);
+	}
+}
+
+void display_drawErrThree(){
+	// Draw a crude 3
+	for(int i = 0; i < 5; i ++){
+		// Create the three 5px long lines
+		putpixel(i + 30, 0, 0x28);
+		putpixel(i + 30, 4, 0x28);
+		putpixel(i + 30, 8, 0x28);
+	}
+	for(int i = 0; i < 2; i += 2){
+		putpixel(35, i + 1, 0x28);
+		putpixel(35, i + 2, 0x28);
+		putpixel(35, i + 3, 0x28);
+		// Second set
+		putpixel(35, i + 5, 0x28);
+		putpixel(35, i + 6, 0x28);
+		putpixel(35, i + 7, 0x28);
+	}
+}

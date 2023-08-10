@@ -45,22 +45,8 @@ void rightPressed(){
 // Error messages
 void keyboardNotPresent(){
 	// Print "Err 3"
-	/*
-	Pixel Arrangement:
-	
-		XXXXX XXXX  XXXX    XXXXX
-		X     X   X X   X        X
-		XXXXX XXXX  XXXX    XXXXX
-		X     X  X  X  X         X
-		XXXXX X   X X   X   XXXXX
-	*/
-	// Show an error message
-	putpixel(0, 0, 0x28);
-	putpixel(0, 1, 0x28);
-	putpixel(0, 2, 0x28);
-	putpixel(0, 3, 0x28);
-	putpixel(0, 4, 0x28);
-	putpixel(0, 5, 0x28);
+	display_drawErr();
+	display_drawErrThree();
 }
 
 // Entrypoint main
