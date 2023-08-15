@@ -8,10 +8,12 @@ Non-interrupt based because I haven't set up an IDT yet.
 
 todo list:
 
-TODO: Fix the Right and Down scancodes. Only 3/5 of the keys work.
-Up, Left, and Enter. Right and down do not work.
-changing the scancodes to be correct causes triple faulting and/or just not recognizing any keys.
-TODO: Add USB Keyboard support.
+TODO: Code is unable to recognize key-presses. Fix this madness.
+
+Also if you want to learn more about this, I two resources that helped a lot.
+
+OSDev Article: https://wiki.osdev.org/PS2_Keyboard
+Ben Eater Video: https://www.youtube.com/watch?v=dL0GO9SeBh0
 */
 
 // Global definitions
@@ -26,7 +28,7 @@ enum SupportedKeyCodes {
 	NULLKEY    = 0x00,          // NullKey; Might be a debugging thing? idk
 	ENTERKEY   = 0x1C,         //  Enter; Used to start the game
 	UPKEY      = 0x11,        //   Up arrow; Used to move the snake up
-	DOWNKEY    = 0x50,       //    Down arrow; Move the snake down
+	DOWNKEY    = 0x1F,       //    Down arrow; Move the snake down
 	RIGHTKEY   = 0x20,      //     Right Arrow; Move the snake right
 	LEFTKEY    = 0x1E,     //      Left Arrow; Move the snake's head left
 	KEYUP      = 0xF0     //       Keyboard sends this scancode on key up
@@ -89,7 +91,19 @@ void keyboard_init(keyboard_cbTable table);
 void keyboard_init(keyboard_cbTable table){
 	// Init Keyboard Driver with callback table
 	keyboard_globalTable = table;
-	keyboard_detect();
+	// Check if keyboard is there
+	int keyboardPresent = keyboard_detect();
+	if(keyboardPresent == 0) return;
+	
+	// I know later on, I may have to add bit delays, but better than nothing.
+
+	// Disable Scanning. May cause triple faulting.
+	writeportb(KEYBOARD, 0xF5);
+	
+	// Setting keyset, first the command byte
+	writeportb(KEYBOARD, 0xF0);
+	// Next we send the Data byte.
+	writeportb(KEYBOARD, 1);
 }
 
 

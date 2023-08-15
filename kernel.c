@@ -12,15 +12,14 @@
  // All these files come with the prefix of the filename
 // This modulates the OS so code can be easily traced.
 #include "display.h"    // Include Display Drivers
-#include "constants.h" //  Include constants which are in the std lib.
-#include "keyboard.h" //   Include the custom keyboard driver
-#include "font.h"    //    Include custom font. Doesn't work yet.
+#include "constants.h" //  Include constants in the std lib.
+#include "keyboard.h" //   Include the keyboard driver
+#include "font.h"    //    Include custom font.
 #include "game.h"   //     Include game code library
 
 DisplayDetails globalDisplayDetails; // The display details.
 
-// Callbacks
-
+// Keypress Callbacks
 void enterPressed(){
 	// Enter was pressed
 	putpixel(10, 10, 0x0E);
@@ -44,7 +43,7 @@ void rightPressed(){
 
 // Error messages
 void keyboardNotPresent(){
-	// Print "Err 3"
+	// Print "Err 3" very crudely
 	display_drawErr();
 	display_drawErrThree();
 }
@@ -57,6 +56,7 @@ int main(){
 
 	// Init the keyboard driver.
 	keyboard_cbTable callbackTable = keyboard_initiateCbTable();
+	// Assign all the key callbacks to their correct members.
 	callbackTable.ENTERKEY = &enterPressed;
 	callbackTable.UPKEY = &upPressed;
 	callbackTable.DOWNKEY = &downPressed;
@@ -65,14 +65,10 @@ int main(){
 	callbackTable.NOKEYBOARD = &keyboardNotPresent;
 	keyboard_init(callbackTable);
 
-	// Draw our logo
-	for(int y = 0; y < game_logoHeight; y ++){
-		for(int x = 0; x < game_logoWidth; x ++){
-			putpixel(x, y, 0x0f);
-		}
-	}
+	// Sanity check
+	putpixel(5, 5, 0x0f);
 
-	// Create our running variable
+	// Create the running variable
 	bool running = true;
 	
 	while(running){
