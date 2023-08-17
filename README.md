@@ -6,13 +6,13 @@ I thought I might as well challenge myself this summer and decided to write an O
 
 ### Progress So far
 
-- [x] Bootloader in 32-bit protected mode
-- [x] C in the binary
-- [x] C running in the OS
-- [x] Graphics driver running
-- [ ] Keyboard Driver working (PS/2)
-- [ ] Actual Game/Engine code running
-- [ ] Game music and sound effects.
+- [x] Working Bootloader
+- [x] Working Kernel
+- [x] Working VGA Driver
+- [ ] Working Keyboard Driver (PS2)
+- [ ] Game Graphics and Logic
+- [ ] Working Sound Driver
+- [ ] Real-Metal Ready
 
 ### Building
 
@@ -24,7 +24,7 @@ Or, you can run it in a VM with QEMU.
 
 ###### Required software
 
-- Qemu x86 emulator (If running in a VM)
+- Qemu x86 Emulator (If running in a VM, Can be substitued if it can boot .bin files.)
 - Rufus or ImgBurn  (If booting from PC)
 - GCC and LD
 - NASM

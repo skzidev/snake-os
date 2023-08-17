@@ -9,13 +9,14 @@
 		   Licensed under MIT.
 */
 
- // All these files come with the prefix of the filename
-// This modulates the OS so code can be easily traced.
-#include "display.h"    // Include Display Drivers
+ //  All these files come with the prefix of the filename
+//   This modulates the OS so code can be easily traced.
+#include "display.h"    // Include Default VGA Display Driver
 #include "constants.h" //  Include constants in the std lib.
-#include "keyboard.h" //   Include the keyboard driver
-#include "font.h"    //    Include custom font.
-#include "game.h"   //     Include game code library
+#include "keyboard.h" //   Include The PS2 keyboard driver
+#include "font.h"    //    Include custom font. Depricated.
+#include "game.h"   //     Include the game code library
+#include "idt.h"   //      Include Interrupt Descriptor Table.
 
 DisplayDetails globalDisplayDetails; // The display details.
 
@@ -53,6 +54,9 @@ int main(){
 	// Init the display details
 	DisplayDetails details = display_init();
 	globalDisplayDetails = details;
+
+	// Init the IDT
+	idt_init();
 
 	// Init the keyboard driver.
 	keyboard_cbTable callbackTable = keyboard_initiateCbTable();

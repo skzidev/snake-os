@@ -14,6 +14,7 @@ Also if you want to learn more about this, I two resources that helped a lot.
 
 OSDev Article: https://wiki.osdev.org/PS2_Keyboard
 Ben Eater Video: https://www.youtube.com/watch?v=dL0GO9SeBh0
+
 */
 
 // Global definitions
