@@ -16,7 +16,7 @@
 #include "keyboard.h" //   Include The PS2 keyboard driver
 #include "font.h"    //    Include custom font. Depricated.
 #include "game.h"   //     Include the game code library
-#include "idt.h"   //      Include Interrupt Descriptor Table.
+// #include "idt.h"   //      Include Interrupt Descriptor Table.
 
 DisplayDetails globalDisplayDetails; // The display details.
 
@@ -56,7 +56,7 @@ int main(){
 	globalDisplayDetails = details;
 
 	// Init the IDT
-	idt_init();
+	// idt_init();
 
 	// Init the keyboard driver.
 	keyboard_cbTable callbackTable = keyboard_initiateCbTable();

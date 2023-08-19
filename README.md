@@ -42,7 +42,9 @@ It should build to a .bin file and load up QEMU by default
 ### Error Codes
 
 There are a couple error messages that may show if the code fails to properly boot or play.
-(Similar to below)
+(Similar to below).
+Below the Error message there may also be a brief explaination of the problem at hand.
+(If it occured in the bootloader stage, Otherwise, it might not.)
 
 The first 2 take place when the OS is in its bootloader stage.
 All other error codes added will be in the kernel stage.

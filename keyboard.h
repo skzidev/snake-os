@@ -138,9 +138,6 @@ void keyboard_read(){
 			keyboard_globalTable.RIGHTKEY();
 			// D was pressed
 			break;
-		case KEYUP:
-			;
-			break;
 		default:
 			// These keys are irrelevant (for now)
 			break;

@@ -8,8 +8,8 @@
 ; 	This is what we mean by "The Kernel". This program is stored at memory address 0x1000
 ;
 
-; IDT Macros
-; In case it's an error
+; IDT Macros and stubs. 
+
 %macro isr_err_stub 1
 isr_stub_%+%1:
     call exception_handler
