@@ -9,18 +9,4 @@ We also keep track of the used color palettes here.
 
 */
 
-enum game_colors {
-	WHITE   = 0x0f,
-	BLACK   = 0x00,
-	GREEN   = 0x0a
-};
-
-int game_logoHeight = 5;
-int game_logoWidth  = 26;
-unsigned char game_Logo[5][26] = {
-	" XXX  XX    X XXXXX X  X",
-	"X     X X   X X     X X ",
-	" XXX  X  X  X XXXXX XX  ",
-	"    X X   X X X     X X ",
-	" XXX  X    XX XXXXX X  X"
-};
+int score = 0;

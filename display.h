@@ -8,6 +8,12 @@ Supports 256 color 320x200 VGA mode, as initiated in our bootloader.
 
 // VRAM starting memory address
 #define VRAM 0xA0000
+// Constant; Width of the snake
+#define SNAKE_WIDTH 20
+// Length of the snake. Starts same as width.
+int snakeLength = 20;
+
+// x and y coordinates of the snake's head.
 
 // Details about our display mode
 typedef struct DisplayModeDetails {
@@ -43,8 +49,7 @@ static void fillrect(unsigned char color, int x, int y, int w, int h) {
  
     for (i = y; i < w; i++) {
         for (j = x; j < h; j++) {
-            //putpixel(vram, 64 + j, 64 + i, (r << 16) + (g << 8) + b);
-            where[j*320] = color;
+            where[j * 320] = color;
         }
         where ++;
     }
@@ -121,4 +126,9 @@ void display_drawErrThree(){
 		putpixel(35, i + 6, 0x28);
 		putpixel(35, i + 7, 0x28);
 	}
+}
+
+// Draw the snake
+void display_drawSnake(){
+	
 }
