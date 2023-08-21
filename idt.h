@@ -22,7 +22,7 @@ typedef unsigned long uintptr;       //     Enough space to hold a pointer.
 // Stub Table. Holds all the handlers for the interrupts
 extern void* isr_stub_table[];
 // Holds a list of "true" booleans. No Idea why it's here.
-int vectors[256];
+// int vectors[256];
 
 // Here is a struct reperesenting one IDT entry.
 typedef struct {
@@ -58,6 +58,13 @@ void exception_handler(){
 	for(;;){}
 }
 
+void interrupt_handler(void);
+void interrupt_handler(){
+	 // I need to find something better to do.
+	// General exception handler
+	for(;;){}
+}
+
   // Here is the function that will config any IDT entry we throw at it.
  //  I'm getting warnings in my editor for setting isr_low and isr_high.
 //   It says casting to another type but GCC is not giving me a warning. 
@@ -75,12 +82,12 @@ void idt_set_descriptor(uint8 vector, void* isr, uint8 flags){
 // Here is our init function, Where we initiate the IDT and such.
 void idt_init(void);
 void idt_init(){
-	idtr.base = (uintptr) &idt[0];
+	idtr.base = (uint32) &idt[0];
 	idtr.limit = (uint16) IDT_ENTRY_BYTE_SIZE * IDT_MAX_DESCRIPTORS - 1;
 
 	for(uint8 vector = 0; vector < 32; vector ++){
 		idt_set_descriptor(vector, isr_stub_table[vector], 0x8E);
-		vectors[vector] = 1;
+		// vectors[vector] = 1;
 	}
 
 	__asm__ volatile ("lidt %0" : : "m"(idtr)); // Load IDT

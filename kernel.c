@@ -16,20 +16,9 @@
 #include "keyboard.h" //   Include The PS2 keyboard driver
 #include "font.h"    //    Include system font.
 #include "game.h"   //     Include the game code library
-// #include "idt.h"   //      Include Interrupt Descriptor Table.
+#include "idt.h"   //      Include Interrupt Descriptor Table.
 
 DisplayDetails globalDisplayDetails; // The display details.
-font_addr fontData;
-
-  // Gets called before `main`.
- //  Loads the address and size into a struct, so it doesn't get lost.
-//   The font will be retrieved in `main`.
-void load_crumbs(){
-	unsigned int address = (unsigned int) 0x0600 + 0x0601;
-	unsigned char size = (unsigned char) 0x06002;
-	fontData.addr = address;
-	fontData.size = size;
-}
 
 // Keypress Callbacks
 void enterPressed(){
@@ -83,7 +72,6 @@ int main(){
 	// Create the running variable
 	bool running = true;
 
-	load_font(fontData);
 		
 	while(running){
 	     // This is the OS loop

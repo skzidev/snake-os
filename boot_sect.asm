@@ -23,7 +23,6 @@ load_kernel:
 	mov dh, SECTORS       ; Put amount of sectors to load into dh
 	mov dl, [BOOTDRIVE]   ; Put the boot drive back into dl
 	call disk_load        ; Load more sectors From Disk
-	call font_load        ; Load the font data for the kernel to retrieve.
 
 	mov ah, 0x00          ; Start setting video mode
 	mov al, 0x13          ; 320x200 256 color graphics
@@ -76,25 +75,6 @@ disk_load:
 	
 	popa              ; Pop A off the stack
 	ret               ; Return from subroutine
-; The Font Load Routine
-font_load:
-	                  ; Get the font table address and write it to memory,
-	                  ; Where the kernel will find it and read it.
-	push es           ; Push ES onto the stack
-	push ds           ; Push DS onto the stack
-
-	mov ax, 0x1130    ; Specify we want the font table address
-	mov bh, 0x06      ; Specify a VGA ROM 8x16 font
-	int 0x10          ; Call the interrupt
-
-	mov [0x0600], es  ; Move the memory address to 0x0600-0x6001
-	mov [0x6001], bp  ; Copy the second half of the memory address.
-	mov [0x6002], cx  ; Move the bytes per character/height in scanlines.
-
-	pop es
-	pop ds
-
-	ret               ; Return from subroutine.
 ; Error routines mentioned above
 ; For more details, the readme will help.
 disk_error:
