@@ -12,5 +12,5 @@ ld -m elf_i386 -o obj/kernel.bin -Ttext 0x1000 obj/entry.o obj/main.o -e main --
 cat obj/boot.bin obj/kernel.bin > bin/os.bin
 
 # Load up our bin file in QEMU (Unless requested not to)
-qemu-system-x86_64 -drive format=raw,file=bin/os.bin -display sdl
+qemu-system-x86_64 -drive format=raw,file=bin/os.bin -display sdl -d int
 # -s -S

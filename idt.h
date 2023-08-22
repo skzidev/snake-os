@@ -83,13 +83,21 @@ void idt_set_descriptor(uint8 vector, void* isr, uint8 flags){
 void idt_init(void);
 void idt_init(){
 	idtr.base = (uint32) &idt[0];
-	idtr.limit = (uint16) IDT_ENTRY_BYTE_SIZE * IDT_MAX_DESCRIPTORS - 1;
+	idtr.limit = (uint16) (IDT_ENTRY_BYTE_SIZE * IDT_MAX_DESCRIPTORS) + 5;
 
 	for(uint8 vector = 0; vector < 32; vector ++){
-		idt_set_descriptor(vector, isr_stub_table[vector], 0x8E);
-		// vectors[vector] = 1;
+		if(vector == 8 || vector == 10 || vector == 11 ||
+		vector == 12 || vector == 13 || vector == 13 || vector == 17 ||
+		vector == 30) {
+			// Err stub
+			idt_set_descriptor(vector, isr_stub_table[vector], 0x8E);
+		}
+		else {
+			// Non-Err Stub.
+			idt_set_descriptor(vector, isr_stub_table[vector], 0x8E);
+		}
 	}
 
 	__asm__ volatile ("lidt %0" : : "m"(idtr)); // Load IDT
-	__asm__ volatile ("sti"); // Enable Interrupts
+	__asm__ volatile ("sti"); // Enable Interrupts. Causes triple-faulting.
 }

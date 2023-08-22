@@ -8,6 +8,9 @@
 ; 	This is what we mean by "The Kernel". This program is stored at memory address 0x1000
 ;
 
+; Load the C part of the kernel.
+call main  ; Call into the C kernel.
+
 ; IDT Macros
 %macro isr_err_stub 1
 isr_stub_%+%1:
@@ -64,7 +67,3 @@ isr_stub_table:
     dd isr_stub_%+i ; use DQ instead if targeting 64-bit
 %assign i i+1 
 %endrep
-
-; Load the C part of the kernel.
-call main  ; Call into our kernel code located at 0x1000
-jmp $      ; Loop if kernel returns control to us.

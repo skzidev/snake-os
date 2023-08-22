@@ -56,7 +56,7 @@ int main(){
 	globalDisplayDetails = details;
 
 	// Init the IDT
-	// idt_init();
+	idt_init();
 
 	// Init the keyboard driver.
 	keyboard_cbTable callbackTable = keyboard_initiateCbTable();
@@ -72,6 +72,7 @@ int main(){
 	// Create the running variable
 	bool running = true;
 
+	putpixel(0, 0, 0x0f);
 		
 	while(running){
 	     // This is the OS loop
