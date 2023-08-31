@@ -12,14 +12,11 @@
 ; Load the boot drive into a variable.
 mov [BOOTDRIVE], dl
 
-; Start loading the kernel
-call load_kernel
-
 ; Start to load the kernel
 load_kernel:
 	                      ; I was planning on calculating how many sectors to
 	                      ; load on the fly so that's why it's here.
-	mov bx, KERNELOFFSET  ; Load the kernel's memory address into bx
+	mov bx, KERNELLOC     ; Load the kernel's memory address into bx
 	mov dh, SECTORS       ; Put amount of sectors to load into dh
 	mov dl, [BOOTDRIVE]   ; Put the boot drive back into dl
 	call disk_load        ; Load more sectors From Disk
@@ -116,8 +113,7 @@ print_more:
 	int 0x10
 	cmp dh, '1'
 	je err_one_message
-	cmp dh, '2'
-	je err_two_message
+	jne err_two_message
 err_two_message:
 	mov bx, err_two  ; Print the first error message
 	call print_loop  ; Call the message loop
@@ -136,16 +132,16 @@ err_msg:
 	call print_err    ; Print the error message.
 	call err_loop     ; Jump to the loop
 err_loop:
-	mov ah, 0x01
+	mov ah, 0x01	
 	mov cx, 0x2607
 	int 0x10
 	jmp $             ; Infinite loop.
 ; Constants
-KERNELOFFSET equ 0x1000           ; Kernel Memory Address
-CODESEG equ gdt_code - gdt_start  ; Code Segment Address
-DATASEG equ gdt_data - gdt_start  ; Data Segment Address
-SECTORS equ 0x05
-
+KERNELLOC equ 0x1000                ; Kernel Memory Address
+CODESEG   equ gdt_code - gdt_start  ; Code Segment Address
+DATASEG   equ gdt_data - gdt_start  ; Data Segment Address
+SECTORS   equ 0x19                  ; Amount of sectors to load
+BEEF      equ 0xBEEF                ; Shhhh! Pretend this isn't here
 ; Global Descriptor Table
 gdt_start:
 	dq 0x0
@@ -176,7 +172,7 @@ gdt_start:
 
 	; GDT Descriptor
 	gdt_descriptor:
-		dw gdt_end - gdt_start
+		dw gdt_end - gdt_start - 1
 		dd gdt_start
 
 ; 32 bit protected mode.
@@ -189,21 +185,21 @@ start_protected_mode:
 	mov es, ax
 	mov fs, ax
 	mov gs, ax
-	                  ; We can access anywhere in memory from here.
 	
-	mov ebp, 0x9000   ; Can't quite remember what this does.
-	mov esp, ebp      ; Probably has to do with the flat memory model.
+	mov ebp, 0x9000   ; This sets the stack pointer 0x9000
+	mov esp, ebp      ; tl;dr this bit sets up the stack.
 
-	call KERNELOFFSET ; Jump to the kernel. It takes everything from here.
+	call KERNELLOC    ; Jump to the kernel. It takes everything from here.
 	jmp $             ; In case the kernel hands back control to us, just loop.
+	; Probably not the best thing to do, but it works for now.
 
 ; The boot drive variable.
 BOOTDRIVE db 0
-; Learn More String
+; Strings that are printed on error.
 err_one:
 	db "Kernel was not found.", 0
 err_two:
-	db "Drive could not be read.", 0
+	db "Drive couldn't be read.", 0
 
 ; Marking as bootable for the BIOS
 times 510-($-$$) db 0
