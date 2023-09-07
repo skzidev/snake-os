@@ -37,7 +37,14 @@ On systems with BASH, use the build script provided in the repo.
 
 `./build.sh`
 
-It should build to a .bin file and load up QEMU by default
+If you encounter an error, it can be caused by the following:
+
+- Missing Dependency
+- Compilation or Assembly error
+
+There is also the `-nvm` command line flag, which will not start QEMU on its own.
+
+**There is currently no windows build script**
 
 ### Error Codes
 
