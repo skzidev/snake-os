@@ -59,10 +59,10 @@ void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags);
 void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags){
 	idt_entry_t* descriptor = &idt[vector];
 
-	descriptor->isr_low    = (uint32_t) isr & 0xFFFF;
-	descriptor->kernel_cs  = 0x8;
+	descriptor->isr_low    = (uint16_5) isr & 0xFFFF;
+	descriptor->kernel_cs  = 0x1000;
 	descriptor->attributes = flags;
-	descriptor->isr_high   = (uint32_t) isr >> 16;
+	descriptor->isr_high   = (uint16_t) isr >> 16;
 	descriptor->reserved   = 0;
 }
 
